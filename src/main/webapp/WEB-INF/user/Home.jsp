@@ -2,9 +2,12 @@
 <%@page import="java.util.Set"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="com.hoan.Objects.Cart"%>
-<%@page import="com.hoan.Objects.CartItem"%>
-<%@page import="com.hoan.Connection.ConnectSQLServer"%>
+<%@page import="com.hoan.Entity.Cart"%>
+<%@page import="com.hoan.Entity.CartItem"%>
+<%@page import="com.hoan.Model.Item"%>
+<%@page import="com.hoan.Model.Order"%>
+<%@page import="com.hoan.Model.ItemsInfor"%>
+<%@page import="com.hoan.Model.OrdersInfor"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -48,7 +51,10 @@ body {
 
 <body>
 	<%
-		ConnectSQLServer connection = new ConnectSQLServer();
+		Item itemModel = new Item();
+		ItemsInfor itemInforModel = new ItemsInfor();
+		Order orderModel = new Order();
+		OrdersInfor ordersInforModel = new OrdersInfor();
 		String itemType = (String) request.getParameter("itemType");
 	%>
 	<script>
@@ -102,28 +108,6 @@ body {
 			/* document
 					.write('<li class="nav-item"><i class="fas fa-user fa-fw"></i><span class="nav-link">'
 							+ username + '</span></li>'); */
-		}
-		function addItemTypeNotActive(itemType) {
-			document
-					.write('<a href="http://localhost:8080/com.spring-mvc-demo/Home?itemType='
-							+ itemType
-							+ '"  class="list-group-item">'
-							+ itemType + '</a>');
-		}
-		function addItemTypeActive(itemType) {
-			document
-					.write('<a href="http://localhost:8080/com.spring-mvc-demo/Home?itemType='
-							+ itemType
-							+ '" class="list-group-item active">'
-							+ itemType + '</a>');
-		}
-		function addHomePageActive() {
-			document
-					.write('<a href="http://localhost:8080/com.spring-mvc-demo/Home" class="list-group-item active">Toàn bộ sản phẩm</a>');
-		}
-		function addHomePageNotActive() {
-			document
-					.write('<a href="http://localhost:8080/com.spring-mvc-demo/Home" class="list-group-item">Toàn bộ sản phẩm</a>');
 		}
 	</script>
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
@@ -190,7 +174,7 @@ body {
 							onchange="searchItem()">
 							<option value="%">Tất cả</option>
 							<%
-								ArrayList<String> itemTypes = connection.getItemType();
+								ArrayList<String> itemTypes = itemInforModel.getItemType();
 								for (String s : itemTypes) {
 									out.print("<option value='" + s + "'>" + s + "</option>");
 								}
@@ -212,12 +196,15 @@ body {
 					<hr>
 					<%
 						out.write("<script>");
-						ArrayList<String> tags = connection.getTags();
+						ArrayList<String> tags = itemInforModel.getTags();
 						for (String s : tags) {
 							out.write("addTag('" + s + "');");
 						}
 						out.write("</script>");
 					%>
+					<hr>
+					<input type="text" id="action" name="action" value="getItemSearch"
+						style="visibility: hidden;">
 				</form>
 			</div>
 			<!-- /.col-lg-3 -->
@@ -276,18 +263,18 @@ body {
 						int itemPrice, stocking;
 
 						if (itemType != null) {
-							ArrayList<String> allItemID = connection.getAllItemType(itemType, "Đang bán");
+							ArrayList<String> allItemID = itemInforModel.getAllItemType(itemType, "Đang bán");
 							for (String itemID : allItemID) {
 								System.out.println(itemID);
-								HashMap<String, Object> item = connection.getItem(itemID);
+								HashMap<String, Object> item = itemModel.getItem(itemID);
 								itemDetail = (String) item.get("itemDetail");
 								itemImg = (String) item.get("itemImg");
 								itemName = (String) item.get("itemName");
 								dateOfMade = (String) item.get("dateOfMade");
 								productionCompany = (String) item.get("productionCompany");
 								madeIn = (String) item.get("madeIn");
-								itemPrice = connection.getItemPrice(itemID).get(1);
-								stocking = connection.getStockingItem(itemID).get(0);
+								itemPrice = itemInforModel.getItemPrice(itemID).get(1);
+								stocking = itemInforModel.getSumStockItem(itemID).get(0);
 
 								System.out.println(itemID + " " + itemDetail + " " + itemImg + " " + itemName + " " + stocking + " "
 										+ itemType + " " + dateOfMade + " " + productionCompany + " " + madeIn + " " + itemPrice);
@@ -298,10 +285,10 @@ body {
 								out.write("</script>");
 							}
 						} else {
-							ArrayList<String> allItemID = connection.getAllItemID("Đang bán");
+							ArrayList<String> allItemID = itemInforModel.getAllItemID("Đang bán");
 							for (String itemID : allItemID) {
 								System.out.println(itemID);
-								HashMap<String, Object> item = connection.getItem(itemID);
+								HashMap<String, Object> item = itemModel.getItem(itemID);
 								itemDetail = (String) item.get("itemDetail");
 								itemImg = (String) item.get("itemImg");
 								itemName = (String) item.get("itemName");;
@@ -309,8 +296,8 @@ body {
 								dateOfMade = (String) item.get("dateOfMade");
 								productionCompany = (String) item.get("productionCompany");
 								madeIn = (String) item.get("madeIn");
-								itemPrice = connection.getItemPrice(itemID).get(1);
-								stocking = connection.getStockingItem(itemID).get(0);
+								itemPrice = itemInforModel.getItemPrice(itemID).get(1);
+								stocking = itemInforModel.getSumStockItem(itemID).get(0);
 								System.out.println(itemID + " " + itemDetail + " " + itemImg + " " + itemName + " " + stocking + " "
 										+ itemType + " " + dateOfMade + " " + productionCompany + " " + madeIn + " " + itemPrice);
 
@@ -359,7 +346,7 @@ body {
 			$
 					.ajax({
 						type : 'POST',
-						url : '/com.spring-mvc-demo/Home/GetItemSearch',
+						url : '/com.spring-mvc-demo/UserActions',
 						dataType : 'JSON',
 						data : form.serialize(),
 						success : function(data) {

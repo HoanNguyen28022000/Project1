@@ -1,8 +1,12 @@
 <%@page import="java.sql.ResultSet"%>
 <%@page import="java.util.HashMap"%>
-<%@page import="com.hoan.Connection.ConnectSQLServer"%>
-<%@page import="com.hoan.Objects.Cart"%>
-<%@page import="com.hoan.Objects.CartItem"%>
+<%@page import="com.hoan.Model.Item"%>
+<%@page import="com.hoan.Model.Order"%>
+<%@page import="com.hoan.Model.ItemsInfor"%>
+<%@page import="com.hoan.Model.OrdersInfor"%>
+<%@page import="com.hoan.Model.Customers"%>
+<%@page import="com.hoan.Entity.Cart"%>
+<%@page import="com.hoan.Entity.CartItem"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -19,533 +23,9 @@
 
 <title>Shop Homepage - Start Bootstrap Template</title>
 
-<style type="text/css">
-body {
-	padding-top: 100px;
-	padding-bottom: 100px;
-}
 
-footer {
-	position: fixed;
-	left: 0;
-	bottom: 0;
-	width: 100%;
-}
-
-select
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-.form-control
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-:not
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-(
-[
-size
-]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-)
-:not
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-(
-[
-multiple
-]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-){
-height
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-:
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-44
-px
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-;
-}
-select.form-control {
-	padding-right: 38px;
-	background-position: center right 17px;
-	background-image:
-		url(data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNv…9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8L3N2Zz4K);
-	background-repeat: no-repeat;
-	background-size: 9px 9px;
-}
-
-.form-control:not(textarea) {
-	height: 44px;
-}
-
-.form-control {
-	padding: 0 18px 3px;
-	border: 1px solid #dbe2e8;
-	border-radius: 22px;
-	background-color: #fff;
-	color: #606975;
-	font-family: "Maven Pro", Helvetica, Arial, sans-serif;
-	font-size: 14px;
-	-webkit-appearance: none;
-	-moz-appearance: none;
-	appearance: none;
-}
-
-.shopping-cart, .wishlist-table, .order-table {
-	margin-bottom: 20px
-}
-
-.shopping-cart .table, .wishlist-table .table, .order-table .table {
-	margin-bottom: 0
-}
-
-.shopping-cart .btn, .wishlist-table .btn, .order-table .btn {
-	margin: 0
-}
-
-.shopping-cart>table>thead>tr>th, .shopping-cart>table>thead>tr>td,
-	.shopping-cart>table>tbody>tr>th, .shopping-cart>table>tbody>tr>td,
-	.wishlist-table>table>thead>tr>th, .wishlist-table>table>thead>tr>td,
-	.wishlist-table>table>tbody>tr>th, .wishlist-table>table>tbody>tr>td,
-	.order-table>table>thead>tr>th, .order-table>table>thead>tr>td,
-	.order-table>table>tbody>tr>th, .order-table>table>tbody>tr>td {
-	vertical-align: middle !important
-}
-
-.shopping-cart>table thead th, .wishlist-table>table thead th,
-	.order-table>table thead th {
-	padding-top: 17px;
-	padding-bottom: 17px;
-	border-width: 1px
-}
-
-.shopping-cart .remove-from-cart, .wishlist-table .remove-from-cart,
-	.order-table .remove-from-cart {
-	display: inline-block;
-	color: #ff5252;
-	font-size: 18px;
-	line-height: 1;
-	text-decoration: none
-}
-
-.shopping-cart .count-input, .wishlist-table .count-input, .order-table .count-input
-	{
-	display: inline-block;
-	width: 100%;
-	width: 86px
-}
-
-.shopping-cart .product-item, .wishlist-table .product-item,
-	.order-table .product-item {
-	display: table;
-	width: 100%;
-	min-width: 150px;
-	margin-top: 5px;
-	margin-bottom: 3px
-}
-
-.shopping-cart .product-item .product-thumb, .shopping-cart .product-item .product-info,
-	.wishlist-table .product-item .product-thumb, .wishlist-table .product-item .product-info,
-	.order-table .product-item .product-thumb, .order-table .product-item .product-info
-	{
-	display: table-cell;
-	vertical-align: top
-}
-
-.shopping-cart .product-item .product-thumb, .wishlist-table .product-item .product-thumb,
-	.order-table .product-item .product-thumb {
-	width: 130px;
-	padding-right: 20px
-}
-
-.shopping-cart .product-item .product-thumb>img, .wishlist-table .product-item .product-thumb>img,
-	.order-table .product-item .product-thumb>img {
-	display: block;
-	width: 100%
-}
-
-@media screen and (max-width: 860px) {
-	.shopping-cart .product-item .product-thumb, .wishlist-table .product-item .product-thumb,
-		.order-table .product-item .product-thumb {
-		display: none
-	}
-}
-
-.shopping-cart .product-item .product-info span, .wishlist-table .product-item .product-info span,
-	.order-table .product-item .product-info span {
-	display: block;
-	font-size: 13px
-}
-
-.shopping-cart .product-item .product-info span>em, .wishlist-table .product-item .product-info span>em,
-	.order-table .product-item .product-info span>em {
-	font-weight: 500;
-	font-style: normal
-}
-
-.shopping-cart .product-item .product-title, .wishlist-table .product-item .product-title,
-	.order-table .product-item .product-title {
-	margin-bottom: 6px;
-	padding-top: 5px;
-	font-size: 16px;
-	font-weight: 500
-}
-
-.shopping-cart .product-item .product-title>a, .wishlist-table .product-item .product-title>a,
-	.order-table .product-item .product-title>a {
-	transition: color .3s;
-	color: #374250;
-	line-height: 1.5;
-	text-decoration: none
-}
-
-.shopping-cart .product-item .product-title>a:hover, .wishlist-table .product-item .product-title>a:hover,
-	.order-table .product-item .product-title>a:hover {
-	color: #0da9ef
-}
-
-.shopping-cart .product-item .product-title small, .wishlist-table .product-item .product-title small,
-	.order-table .product-item .product-title small {
-	display: inline;
-	margin-left: 6px;
-	font-weight: 500
-}
-
-.wishlist-table .product-item .product-thumb {
-	display: table-cell !important
-}
-
-@media screen and (max-width: 576px) {
-	.wishlist-table .product-item .product-thumb {
-		display: none !important
-	}
-}
-
-.shopping-cart-footer {
-	display: table;
-	width: 100%;
-	padding: 10px 0;
-	border-top: 1px solid #e1e7ec
-}
-
-.shopping-cart-footer>.column {
-	display: table-cell;
-	padding: 5px 0;
-	vertical-align: middle
-}
-
-.shopping-cart-footer>.column:last-child {
-	text-align: right
-}
-
-.shopping-cart-footer>.column:last-child .btn {
-	margin-right: 0;
-	margin-left: 15px
-}
-
-@media ( max-width : 768px) {
-	.shopping-cart-footer>.column {
-		display: block;
-		width: 100%
-	}
-	.shopping-cart-footer>.column:last-child {
-		text-align: center
-	}
-	.shopping-cart-footer>.column .btn {
-		width: 100%;
-		margin: 12px 0 !important
-	}
-}
-
-.coupon-form .form-control {
-	display: inline-block;
-	width: 100%;
-	max-width: 235px;
-	margin-right: 12px;
-}
-
-.form-control-sm:not(textarea) {
-	height: 36px;
-}
-
-.divider-text {
-	position: relative;
-	text-align: center;
-	margin-top: 15px;
-	margin-bottom: 15px;
-}
-
-.divider-text span {
-	padding: 7px;
-	font-size: 12px;
-	position: relative;
-	z-index: 2;
-}
-
-.divider-text:after {
-	content: "";
-	position: absolute;
-	width: 100%;
-	border-bottom: 1px solid #ddd;
-	top: 55%;
-	left: 0;
-	z-index: 1;
-}
-
-.quantityCart {
-	height: 25px;
-	width: 25px;
-	background-color: red;
-	border-radius: 50%;
-	display: inline-block;
-	color: white;
-}
-</style>
-
+<link href="<c:url value="/resources/UserTemplate/css/cart.css"/>"
+	rel="stylesheet" />
 <!-- Bootstrap core CSS -->
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -557,10 +37,15 @@ select.form-control {
 
 <body>
 	<%
-		ConnectSQLServer connection = new ConnectSQLServer();
+		Item itemModel = new Item();
+		ItemsInfor itemInforModel = new ItemsInfor();
+		Order orderModel = new Order();
+		OrdersInfor ordersInforModel = new OrdersInfor();
+		Customers customersModel= new Customers();
+
 		String username = (String) session.getAttribute("user");
 
-		HashMap<String, Object> userinfor = connection.getUserInfor(username);
+		HashMap<String, Object> userinfor = customersModel.getUserInfor(username);
 	%>
 	<script>
 		function loggedIn() {
@@ -651,7 +136,7 @@ select.form-control {
 				<div class="column">
 					<form class="coupon-form" method="post">
 						<input class="form-control form-control-sm" type="text"
-							placeholder="Coupon code" required="">
+							placeholder="Coupon code" >
 						<button class="btn btn-outline-primary btn-sm" type="submit">Apply
 							Coupon</button>
 					</form>
@@ -670,12 +155,14 @@ select.form-control {
 			</div>
 		</div>
 		<%
-			int sumMoney=0;
+			int sumMoney = 0;
 			if (username != null) {
-				sumMoney= connection.getSumMoney(username);
+				sumMoney = customersModel.getSumMoney(username);
 			}
 		%>
-		<h4>Lịch sử giao dịch (Tổng chi : <span id="sumMoney" style="color: red;"><%=String.valueOf(sumMoney)%></span>)</h4>
+		<h4>
+			Lịch sử giao dịch (Tổng chi : <span id="sumMoney" style="color: red;"><%=String.valueOf(sumMoney)%></span>)
+		</h4>
 		<table class="table" id="orderHistoryTable"
 			style="text-align: center;">
 			<thead>
@@ -784,8 +271,9 @@ select.form-control {
 		var checkoutcontainer = document.getElementById("checkoutcontainer").innerHTML; */
 		getCart();
 		getOrderHistory();
-		
-		document.getElementById("sumMoney").innerHTML= formatNumber(parseInt(document.getElementById("sumMoney").innerText));
+
+		document.getElementById("sumMoney").innerHTML = formatNumber(parseInt(document
+				.getElementById("sumMoney").innerText));
 
 		var subtotal = 0;
 
@@ -795,12 +283,13 @@ select.form-control {
 					.toString();
 			$.ajax({
 				type : 'POST',
-				url : '/com.spring-mvc-demo/Home/Cart/ConfirmOrder',
+				url : '/com.spring-mvc-demo/UserActions',
 				dataType : 'JSON',
 				data : {
 					"receive_phone" : receive_phone,
 					"receive_address" : receive_address,
-					"subtotal" : subtotal
+					"subtotal" : subtotal,
+					"action" : "confirmOrder"
 				},
 				success : function(data) {
 					alert("Đặt hàng thành công");
@@ -821,11 +310,12 @@ select.form-control {
 		function update(quantityupdate, itemID) {
 			$.ajax({
 				type : 'POST',
-				url : '/com.spring-mvc-demo/Home/Cart/UpdateCart',
+				url : '/com.spring-mvc-demo/UserActions',
 				dataType : 'JSON',
 				data : {
 					"quantityupdate" : quantityupdate.toString(),
-					"itemID" : itemID
+					"itemID" : itemID,
+					"action" : "updateCart"
 				},
 				success : function(data) {
 					/* alert("updated quantity:" +data); */
@@ -839,9 +329,12 @@ select.form-control {
 			var cartcontent = '';
 			$
 					.ajax({
-						url : '/com.spring-mvc-demo/Home/Cart/GetCart',
-						type : 'GET',
+						url : '/com.spring-mvc-demo/UserActions',
+						type : 'POST',
 						dataType : 'JSON',
+						data : {
+							"action" : "getCart"
+						},
 						success : function(data) {
 							subtotal = 0;
 							console.log(data.length);
@@ -872,7 +365,7 @@ select.form-control {
 													cartcontent += '<td class="text-center text-lg text-medium">'
 															+ formatNumber(this.itemPrice)
 															+ '</td>';
-													cartcontent += '<td class="text-center"><button class="btn btn-success" onclick="deleteItemCart('
+													cartcontent += '<td class="text-center"><button class="btn btn-danger" onclick="deleteItemCart('
 															+ this.itemID
 															+ ')"><i class="fa fa-trash"></i></button></td></tr>';
 												});
@@ -890,13 +383,13 @@ select.form-control {
 		function deleteItemCart(itemID) {
 			$.ajax({
 				type : 'POST',
-				url : '/com.spring-mvc-demo/Home/Cart/DeleteItemCart',
+				url : '/com.spring-mvc-demo/UserActions',
 				dataType : 'JSON',
 				data : {
-					"itemID" : itemID
+					"itemID" : itemID,
+					"action" : "deleteItemCart"
 				},
 				success : function(data) {
-					alert("deleted");
 					getCart();
 				}
 			});
@@ -913,11 +406,12 @@ select.form-control {
 			html_code += '<tbody>';
 			$
 					.ajax({
-						url : '/com.spring-mvc-demo/Admin/Order/GetOrderDetail',
+						url : '/com.spring-mvc-demo/Admin/OrderActions',
 						type : 'POST',
 						dataType : 'JSON',
 						data : {
-							"orderID" : orderID
+							"orderID" : orderID,
+							"action" : "getOrderDetail"
 						},
 						success : function(data) {
 							$(data)
@@ -957,9 +451,12 @@ select.form-control {
 			var html_code = '';
 			$
 					.ajax({
-						url : '/com.spring-mvc-demo/Home/Cart/OrderHistory',
-						type : 'GET',
+						url : '/com.spring-mvc-demo/UserActions',
+						type : 'POST',
 						dataType : 'JSON',
+						data : {
+							"action" : "getOrderHistory"
+						},
 						success : function(data) {
 							$(data)
 									.each(

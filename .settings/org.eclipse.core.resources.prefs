@@ -1,7 +1,12 @@
 eclipse.preferences.version=1
-encoding//src/main/java/com/hoan/Connection/ConnectSQLServer.java=UTF-8
+encoding//src/main/java=UTF-8
 encoding//src/main/java/com/hoan/Controller/login/CreateAccount.java=UTF-8
 encoding//src/main/java/com/hoan/Controller/login/CreateAccountController.java=UTF-8
 encoding//src/main/java/com/hoan/Controller/login/LoginController.java=UTF-8
-encoding//src/main/java/com/hoan/Controller/upload/FileUploadServlet.java=UTF-8
-encoding//src/main/java/com/hoan/Controller/user/HomeController.java=UTF-8
+encoding//src/main/java/com/hoan/Controller/user/UserController.java=UTF-8
+encoding//src/main/java/com/hoan/Model/ConnectSQLServer.java=UTF-8
+encoding//src/main/webapp/resources=UTF-8
+encoding//src/main/webapp/resources/UserTemplate=UTF-8
+encoding//src/main/webapp/resources/UserTemplate/css/cart.css=UTF-8
+encoding//src/main/webapp/resources/admintemplate=UTF-8
+encoding//src/main/webapp/resources/images=UTF-8

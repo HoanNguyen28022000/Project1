@@ -16,7 +16,7 @@
 						href="http://localhost:8080/com.spring-mvc-demo/Admin">
 						<div class="sb-nav-link-icon">
 							<i class="fas fa-tachometer-alt"></i>
-						</div> Tổng quan
+						</div> Thống kê
 					</a> <a class="nav-link collapsed" href="#" data-toggle="collapse"
 						data-target="#collapseLayouts1" aria-expanded="false"
 						aria-controls="collapseLayouts1">
@@ -32,9 +32,9 @@
 						<nav class="sb-sidenav-menu-nested nav">
 							<a class="nav-link"
 								href="http://localhost:8080/com.spring-mvc-demo/Admin/Items">Danh
-								sách sản phẩm</a> <a class="nav-link" href="#">Quản lí kho</a> <a
-								class="nav-link" href="#">Nhập hàng</a><a class="nav-link"
-								href="#">Nhà cung cấp</a>
+								sách sản phẩm</a> <a class="nav-link"
+								href="http://localhost:8080/com.spring-mvc-demo/Admin/PurchaseItems">Nhập
+								hàng</a>
 						</nav>
 					</div>
 					<a class="nav-link collapsed" href="#" data-toggle="collapse"
@@ -50,29 +50,14 @@
 					<div class="collapse" id="collapseLayouts2"
 						aria-labelledby="headingOne" data-parent="#sidenavAccordion">
 						<nav class="sb-sidenav-menu-nested nav">
-							<a class="nav-link" href="#">Tạo đơn hàng </a> <a
-								class="nav-link"
+							<a class="nav-link"
 								href="http://localhost:8080/com.spring-mvc-demo/Admin/Order">Danh
 								sách đơn hàng</a>
 						</nav>
 					</div>
-					<a class="nav-link collapsed" href="#" data-toggle="collapse"
-						data-target="#collapseLayouts3" aria-expanded="false"
-						aria-controls="collapseLayouts3">
-						<div class="sb-nav-link-icon">
-							<i class="fas fa-shipping-fast"></i>
-						</div>Vận chuyển
-						<div class="sb-sidenav-collapse-arrow">
-							<i class="fas fa-angle-down"></i>
-						</div>
-					</a>
-					<div class="collapse" id="collapseLayouts3"
-						aria-labelledby="headingOne" data-parent="#sidenavAccordion">
-						<nav class="sb-sidenav-menu-nested nav">
-							<a class="nav-link" href="#">Shipper </a> 
-						</nav>
-					</div>
-					<a class="nav-link" href="#"><div class="sb-nav-link-icon">
+					<a class="nav-link"
+						href="http://localhost:8080/com.spring-mvc-demo/Admin/Customers"><div
+							class="sb-nav-link-icon">
 							<i class="fas fa-user"></i>
 						</div>Khách hàng </a>
 				</div>

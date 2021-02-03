@@ -6,18 +6,86 @@
 		</servlet-class>
     <load-on-startup>1</load-on-startup>
   </servlet>
+  <filter>
+    <filter-name>FilterAdmin</filter-name>
+    <filter-class>com.hoan.Security.FilterAdmin</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>FilterAdmin</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
   <servlet-mapping>
     <servlet-name>spring-config</servlet-name>
     <url-pattern>/</url-pattern>
   </servlet-mapping>
   <servlet>
     <description></description>
-    <display-name>FileUploadServlet</display-name>
-    <servlet-name>FileUploadServlet</servlet-name>
-    <servlet-class>com.hoan.Controller.upload.FileUploadServlet</servlet-class>
+    <display-name>ItemTagsActions</display-name>
+    <servlet-name>ItemTagsActions</servlet-name>
+    <servlet-class>com.hoan.Controller.ajax.admin.ItemTagsActions</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>FileUploadServlet</servlet-name>
-    <url-pattern>/Admin/Items/fileuploadservlet</url-pattern>
+    <servlet-name>ItemTagsActions</servlet-name>
+    <url-pattern>/Admin/Items/Tags</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>OrderActions</display-name>
+    <servlet-name>OrderActions</servlet-name>
+    <servlet-class>com.hoan.Controller.ajax.admin.OrderActions</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>OrderActions</servlet-name>
+    <url-pattern>/Admin/OrderActions</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ItemActions</display-name>
+    <servlet-name>ItemActions</servlet-name>
+    <servlet-class>com.hoan.Controller.ajax.admin.ItemActions</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ItemActions</servlet-name>
+    <url-pattern>/Admin/ItemActions</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ItemEditActions</display-name>
+    <servlet-name>ItemEditActions</servlet-name>
+    <servlet-class>com.hoan.Controller.ajax.admin.ItemEditActions</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ItemEditActions</servlet-name>
+    <url-pattern>/Admin/Items/EditActions</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>UserActions</display-name>
+    <servlet-name>UserActions</servlet-name>
+    <servlet-class>com.hoan.Controller.ajax.user.UserActions</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UserActions</servlet-name>
+    <url-pattern>/UserActions</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>PurchaseItemsActions</display-name>
+    <servlet-name>PurchaseItemsActions</servlet-name>
+    <servlet-class>com.hoan.Controller.ajax.admin.PurchaseItemsActions</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>PurchaseItemsActions</servlet-name>
+    <url-pattern>/Admin/PurchaseItemsActions</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>StatisticalActions</display-name>
+    <servlet-name>StatisticalActions</servlet-name>
+    <servlet-class>com.hoan.Controller.ajax.admin.StatisticalActions</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>StatisticalActions</servlet-name>
+    <url-pattern>/Admin/StatisticalActions</url-pattern>
   </servlet-mapping>
 </web-app>

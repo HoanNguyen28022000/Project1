@@ -1,7 +1,7 @@
 <%@page import="java.util.Set"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="com.hoan.Connection.ConnectSQLServer"%>
+<%@page import="com.hoan.Model.ItemsInfor"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -71,8 +71,8 @@
 		<div id="layoutSidenav_content">
 			<main>
 				<form class="container-fluid row" style="text-align: center;"
-					action="fileuploadservlet" method="post"
-					enctype="multipart/form-data">
+					action="EditActions" id="formInsert" name="formInsert"
+					method="post" enctype="multipart/form-data">
 					<div class="col-lg-6" style="padding-top: 50px;">
 						<h2>Thêm sản phẩm</h2>
 						<hr>
@@ -83,10 +83,11 @@
 								</span>
 							</div>
 							<input name="itemID" id="itemID" class="form-control"
-								autocomplete="off" 
-								oninput="checkItemID()" placeholder="ID sản phẩm" value="" type="text">
-							<div id="invalidID" class="invalid-feedback" style="visibility: hidden;">ID sản
-								phẩm đã trùng hoặc không hợp lệ</div>
+								autocomplete="off" oninput="checkItemID()"
+								placeholder="ID sản phẩm" value="" type="text">
+							<div id="invalidID" class="invalid-feedback"
+								style="visibility: hidden;">ID sản phẩm đã trùng hoặc
+								không hợp lệ</div>
 						</div>
 						<!-- form-group// -->
 						<div class="form-group input-group">
@@ -162,36 +163,38 @@
 						<input type="file" name="file" id="file" /> <br> <img
 							id="blah" src="#" width="70%" height="auto" />
 						<hr>
-						<input type="submit" class="btn btn-success" style="width: 100%"
-							value="Thêm">
+						<input type="Submit" class="btn btn-success" style="width: 100%"
+							onclick="insertItem()" value="Thêm">
+						<hr>
+						<input type="text" name="action" value="insert"
+							style="visibility: hidden;">
 					</div>
+
 				</form>
 			</main>
 		</div>
 
 	</div>
 	<script>
-		var allItemIDs=[];
-		<%ConnectSQLServer connection = new ConnectSQLServer();
-			ArrayList<String> allItemIDs = connection.getAllItemID("%");
+		var allItemIDs = [];
+	<%ItemsInfor itemInforModel = new ItemsInfor();
+			ArrayList<String> allItemIDs = itemInforModel.getAllItemID("%");
 			for (String itemID : allItemIDs) {
 				out.print("allItemIDs.push('" + itemID + "');");
 			}%>
 		function checkItemID() {
-			if(allItemIDs.includes(document.getElementById("itemID").value) || document.getElementById("itemID").value=='') {
-				document.getElementById("invalidID").style.visibility= "visible";
-				document.getElementById("itemID").className= "form-control is-invalid";
-			}
-			else {
-				document.getElementById("invalidID").style.visibility= "hidden";
-				document.getElementById("itemID").className= "form-control is-valid";
+			if (allItemIDs.includes(document.getElementById("itemID").value)
+					|| document.getElementById("itemID").value == '') {
+				document.getElementById("invalidID").style.visibility = "visible";
+				document.getElementById("itemID").className = "form-control is-invalid";
+			} else {
+				document.getElementById("invalidID").style.visibility = "hidden";
+				document.getElementById("itemID").className = "form-control is-valid";
 			}
 		}
-		
-		var d = new Date();
-		var today = d.getFullYear() + '-' + (d.getMonth() + 1) + '-'
-				+ d.getDate();
-		document.getElementById("dateborn").setAttribute("max", today);
+
+		document.getElementById("dateborn").max = new Date().toISOString()
+				.split("T")[0];
 
 		var imgName = '';
 		function formatNumber() {

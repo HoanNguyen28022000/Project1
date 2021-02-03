@@ -134,7 +134,7 @@ body {
 		<div class="form">
 			<form class="login-form" action="LoginController" method="post">
 				<div style="text-align: center;">
-					<img alt="" src="file://E:/HOC TAP/Lap Trinh/JAVA/WorkSpace/com.spring-mvc-demo/src/main/webapp/resources/images/avatar_login.png">
+					<img alt="" src="<c:url value="/resources/images/avatar_login.png"/>">
 				</div>
 				<input type="text" placeholder="username" name="name" /> <input
 					type="password" placeholder="password" name="pass" />

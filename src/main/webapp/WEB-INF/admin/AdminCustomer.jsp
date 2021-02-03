@@ -1,7 +1,7 @@
 <%@page import="java.util.Set"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="com.hoan.Connection.ConnectSQLServer"%>
+<%@page import="com.hoan.Model.ConnectSQLServer"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -18,18 +18,13 @@
 	rel="stylesheet" />
 <link
 	href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css"
-	rel="stylesheet" />
+	rel="stylesheet" crossorigin="anonymous" />
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js"></script>
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body class="sb-nav-fixed">
-	<script>
-		$(document).ready(function() {
-			$('#dataTableCustomer').DataTable();
-		});
-	</script>
 	<jsp:include page="/WEB-INF/admin/head.jsp"></jsp:include>
 
 	<div id="layoutSidenav">
@@ -37,15 +32,15 @@
 		<div id="layoutSidenav_content">
 			<main>
 				<div class="container-fluid">
-					<h1 class="mt-4" style="padding-bottom: 20px;">Đơn hàng</h1>
+					<h1 class="mt-4" style="padding-bottom: 20px;">Khách hàng</h1>
 					<div class="card mb-4">
 						<div class="card-header">
-							<i class="fas fa-table mr-1"></i> Đơn hàng bị trả lại
+							<i class="fas fa-table mr-1"></i> Số tiền đã chi
 						</div>
 						<div class="card-body">
 							<div class="table-responsive">
-								<table class="table table-bordered" id="dataTableCustomer"
-									width="100%" cellspacing="0">
+								<table class="table table-bordered" id="dataTable" width="100%"
+									cellspacing="0">
 									<thead>
 										<tr>
 											<th>Tài khoản</th>
@@ -90,7 +85,22 @@
 			</footer>
 		</div>
 	</div>
+
+	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
+	<script
+		src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+	<script
+		src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+	<script
+		src="<c:url value="/resources/admintemplate/js/datatables-demo.js"/>"></script>
+
 	<script>
+		$(document).ready(function() {
+			$('#dataTable').DataTable();
+		});
+
 		getCustomer();
 
 		function formatNumber(num) {
@@ -101,9 +111,12 @@
 		function getCustomer() {
 			var html_code = '';
 			$.ajax({
-				url : '/com.spring-mvc-demo/Admin/GetCustomer',
+				url : '/com.spring-mvc-demo/Admin/OrderActions',
 				type : 'POST',
 				dataType : 'JSON',
+				data : {
+					"action" : "getCustomers"
+				},
 				success : function(data) {
 					$(data).each(
 							function() {
@@ -127,21 +140,7 @@
 			});
 		}
 	</script>
-	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
-	<script src="<c:url value="/resources/admintemplate/js/scripts.js"/>"></script>
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
-	<script
-		src="<c:url value="/resources/admintemplate/assets/demo/chart-area-demo.js"/>"></script>
-	<script
-		src="<c:url value="/resources/admintemplate/assets/demo/chart-bar-demo.js"/>"></script>
-	<script
-		src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
-	<script
-		src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
-	<script
-		src="<c:url value="/resources/admintemplate/assets/demo/datatables-customer.js"/>"></script>
+
+
 </body>
 </html>

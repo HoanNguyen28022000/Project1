@@ -2,7 +2,8 @@
 <%@page import="java.util.Set"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="com.hoan.Connection.ConnectSQLServer"%>
+<%@page import="com.hoan.Model.Item"%>
+<%@page import="com.hoan.Model.ItemsInfor"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -16,7 +17,7 @@
 	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <meta name="description" content="" />
 <meta name="author" content="" />
-<title>Dashboard - SB Admin</title>
+<title>BK SHOES ADMIN</title>
 <link href="<c:url value="/resources/admintemplate/css/styles.css"/>"
 	rel="stylesheet" />
 <link
@@ -26,6 +27,17 @@
 	src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js"></script>
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<%
+	Item itemModel = new Item();
+	ItemsInfor itemInforModel = new ItemsInfor();
+	
+	if(request.getAttribute("insert")!=null) {
+		out.println("<script>");
+		   out.println("alert('Thêm không thành công. Kiểm tra lại dữ liệu');");
+		   out.println("</script>");
+	}
+%>
 </head>
 <script>
 	function addTag(tag) {
@@ -67,8 +79,7 @@
 										name="selectType" onchange="searchItem()">
 										<option value="%">Tất cả</option>
 										<%
-											ConnectSQLServer connection = new ConnectSQLServer();
-											ArrayList<String> itemTypes = connection.getItemType();
+											ArrayList<String> itemTypes = itemInforModel.getItemType();
 											for (String s : itemTypes) {
 												out.print("<option value='" + s + "'>" + s + "</option>");
 											}
@@ -79,7 +90,7 @@
 								<label><span style="font-weight: bold;">Tag</span></label>
 								<%
 									out.write("<script>");
-									ArrayList<String> tags = connection.getTags();
+									ArrayList<String> tags = itemInforModel.getTags();
 									for (String s : tags) {
 										out.write("addTag('" + s + "');");
 									}
@@ -97,6 +108,8 @@
 										</button>
 									</div>
 								</div>
+								<input type="text" id="action" name="action" value="search"
+									style="visibility: hidden;">
 							</form>
 						</div>
 						<div class="table-responsive col-sm-10">
@@ -119,7 +132,7 @@
 							</div>
 							<br>
 							<form id="formAction">
-								<input type="text" id="action" name="action"
+								<input type="text" id="status" name="status"
 									style="visibility: hidden;">
 								<table class="table" id="CartTable">
 									<thead>
@@ -138,6 +151,8 @@
 									<tbody id="TableBody">
 									</tbody>
 								</table>
+								<input type="text" id="action" name="action" value="changeStatus"
+									style="visibility: hidden;">
 							</form>
 						</div>
 					</div>
@@ -176,7 +191,7 @@
 			var formAction = $('#formAction');
 			$.ajax({
 				type : 'POST',
-				url : '/com.spring-mvc-demo/Admin/Items/Action',
+				url : '/com.spring-mvc-demo/Admin/ItemActions',
 				dataType : 'JSON',
 				data : formAction.serialize(),
 				success : function(data) {
@@ -196,7 +211,7 @@
 			$
 					.ajax({
 						type : 'POST',
-						url : '/com.spring-mvc-demo/Admin/GetItemSearchAdmin',
+						url : '/com.spring-mvc-demo/Admin/ItemActions',
 						dataType : 'JSON',
 						data : form.serialize(),
 						success : function(data) {
@@ -210,8 +225,7 @@
 													+this.itemID+'" value="'
 													+this.itemID+'"/></td>';
 												html_code += '<td>'
-														+ this.itemID
-														+ '</td>';
+														+ this.itemID + '</td>';
 												html_code += '<td><div class="product-item"><a class="product-thumb" href="http://localhost:8080/com.spring-mvc-demo/Admin/Items/Edit?itemID='
 														+ this.itemID
 														+ '"><img width="100px" height="100px" src="<c:url value="';
@@ -248,7 +262,7 @@
 		};
 
 		function onAction(action) {
-			document.getElementById("action").value = action;
+			document.getElementById("status").value = action;
 			/* alert(action); */
 			itemAction();
 		}

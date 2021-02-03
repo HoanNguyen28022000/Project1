@@ -1,7 +1,8 @@
 <%@page import="java.util.Set"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="com.hoan.Connection.ConnectSQLServer"%>
+<%@page import="com.hoan.Model.Item"%>
+<%@page import="com.hoan.Model.ItemsInfor"%>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
@@ -98,13 +99,13 @@
 		}
 	</script>
 	<%
-		String itemID = request.getParameter("itemID");
+		Item itemModel = new Item();
+		ItemsInfor itemInforModel = new ItemsInfor();
 
+		String itemID = request.getParameter("itemID");
 		String itemDetail, itemImg, itemName, stocking, itemType, dateOfMade, productionCompany, madeIn, itemColor;
 
-		ConnectSQLServer connection = new ConnectSQLServer();
-
-		HashMap<String, Object> item = connection.getItem(itemID);
+		HashMap<String, Object> item = itemModel.getItem(itemID);
 		itemDetail = (String) item.get("itemDetail");
 		itemImg = ((String) item.get("itemImg")).substring(20);
 		itemName = (String) item.get("itemName");
@@ -114,17 +115,21 @@
 		madeIn = (String) item.get("madeIn");
 		itemColor = (String) item.get("itemColor");
 
-		int itemPrice = connection.getItemPrice(itemID).get(1);
+		ArrayList<Integer> itemPrice = itemInforModel.getItemPrice(itemID);
 	%>
 	<jsp:include page="/WEB-INF/admin/head.jsp"></jsp:include>
 	<div id="layoutSidenav">
 		<jsp:include page="/WEB-INF/admin/SlideMenu.jsp"></jsp:include>
 		<div id="layoutSidenav_content">
 			<main>
-				<form class="container-fluid" action="fileuploadservlet"
-					style="padding-top: 30px;" method="post"
+				<form class="container-fluid" id="formEdit" name="formEdit"
+					action="EditActions" style="padding-top: 30px;" method="post"
 					enctype="multipart/form-data">
 					<!-- <input type="submit" style="float: right;" class="btn btn-success" value="Thay đổi"> -->
+					<div class="col-lg-12">
+						<button type="submit" style="float: right;"
+							class="btn btn-success">Lưu</button>
+					</div>
 					<div class="row">
 						<div class="col-lg-6">
 							<h2>Thay đổi sản phẩm</h2>
@@ -173,9 +178,10 @@
 										class="fa fa-address-book"></i>&nbsp;&nbsp;Ngày sản xuất:
 									</span>
 								</div>
-								<input id="dateOfMade" name="dateOfMade" class="form-control"
-									placeholder="yy-mm-dd" value="<%=dateOfMade.substring(0, 10)%>"
-									type="date">
+								<input type="date" id="dateOfMade" name="dateOfMade"
+									class="form-control" placeholder="yy-mm-dd"
+									value="<%=dateOfMade.substring(0, 10)%>">
+								<!-- <input type="date" id="datemax" name="datemax" max="1979-12-31" value="2020-12-12"><br><br> -->
 							</div>
 							<div class="form-group input-group">
 								<div class="input-group-prepend">
@@ -205,76 +211,14 @@
 								<input id="itemDetail" name="itemDetail" class="form-control"
 									placeholder="Loại" value="<%=itemDetail%>" type="text">
 							</div>
-							<!-- <div class="form-group input-group">
-							<div class="input-group-prepend">
-								<span class="input-group-text"> <i
-									class="fa fa-address-book"></i>&nbsp;&nbsp;Size:
-								</span>
-							</div>
-							&nbsp;&nbsp;&nbsp;&nbsp;
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="checkbox" name="size"
-									id="36" value="36"> <label class="form-check-label"
-									for="inlineCheckbox1">36</label>
-							</div>
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="checkbox" name="size"
-									id="37" value="37"> <label class="form-check-label"
-									for="inlineCheckbox1">37</label>
-							</div>
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="checkbox" name="size"
-									id="38" value="38"> <label class="form-check-label"
-									for="inlineCheckbox1">38</label>
-							</div>
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="checkbox" name="size"
-									id="39" value="39"> <label class="form-check-label"
-									for="inlineCheckbox1">39</label>
-							</div>
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="checkbox" name="size"
-									id="40" value="40"> <label class="form-check-label"
-									for="inlineCheckbox1">40</label>
-							</div>
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="checkbox" name="size"
-									id="41" value="41"> <label class="form-check-label"
-									for="inlineCheckbox1">41</label>
-							</div>
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="checkbox" name="size"
-									id="42" value="42"> <label class="form-check-label"
-									for="inlineCheckbox1">42</label>
-							</div>
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="checkbox" name="size"
-									id="43" value="43"> <label class="form-check-label"
-									for="inlineCheckbox1">43</label>
-							</div>
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="checkbox" name="size"
-									id="44" value="44"> <label class="form-check-label"
-									for="inlineCheckbox1">44</label>
-							</div>
-						</div>
-						<div class="form-group input-group">
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="checkbox" name="stocking"
-									id="stocking" value="1">
-							</div>
-							<div class="input-group-prepend">
-								<span class="input-group-text"> Còn hàng: </span>
-							</div>
-						</div> -->
 
 						</div>
 						<div class="col-lg-6 " style="text-align: center;">
-							<h2>Upload Product Here</h2>
+							<h2>Tải ảnh lên</h2>
 							<hr>
-							<label for="file">SELECT FILE:</label>&nbsp;&nbsp;&nbsp;<input
-								type="file" name="file" id="file" /> <br> <img id="blah"
-								src="<c:url value="<%=itemImg%>"/>" width="50%" height="auto" />
+							<input type="file" name="file" id="file" /> <br> <img
+								id="blah" src="<c:url value="<%=itemImg%>"/>" width="50%"
+								height="auto" />
 						</div>
 					</div>
 					<hr>
@@ -290,6 +234,7 @@
 									</tr>
 								</thead>
 								<tbody id="priceTableBody">
+									<%-- <c:forEach ></c:forEach> --%>
 
 								</tbody>
 							</table>
@@ -308,17 +253,23 @@
 								</tbody>
 							</table>
 						</div>
-						
+
 						<div class="col-lg-3 ">
 							<h4 style="display: inline;">Giá bán hiện tại :</h4>
 							&nbsp;&nbsp;
-							<h5 id="showPrice" style="display: inline; color: red"></h5>
+							<h5 id="formatSalePrice" style="display: inline; color: red"></h5>
 							<input class="form-control" id="currSalePrice"
-								name="currSalePrice" value="<%=String.valueOf(itemPrice)%>"
+								name="currSalePrice"
+								value="<%=String.valueOf(itemPrice.get(1))%>"
 								style="margin-top: 20px;" type="number" step="1000" min="0"
-								onchange="showPrice()" readonly>
-							<button class="btn btn-primary" onclick="editSalePrice()"
+								onchange="formatSalePrice()" readonly>
+							<button class="btn btn-danger"
+								onclick="saveSalePrice('<%=itemID%>', '<%=String.valueOf(itemPrice.get(0))%>')"
 								type="button" style="float: right; margin-top: 10px;">
+								OK</button>
+							<button class="btn btn-primary" onclick="editSalePrice()"
+								type="button"
+								style="float: right; margin-top: 10px; margin-right: 5px;">
 								Sửa</button>
 						</div>
 						<div class="col-lg-3 ">
@@ -331,10 +282,8 @@
 							<div id="tags"></div>
 						</div>
 					</div>
-					<hr>
-					<div class="row">
-						
-					</div>
+					<input type="text" name="action" value="edit"
+						style="visibility: hidden;">
 				</form>
 
 			</main>
@@ -365,64 +314,88 @@
 
 				<!-- Modal body -->
 				<div class="modal-body">
-					<input class="form-control" type="text" id="insertTag" placeholder="nhập tag">
+					<input class="form-control" type="text" id="insertTag"
+						placeholder="nhập tag" autocomplete="off">
 				</div>
 
 				<!-- Modal footer -->
 				<div class="modal-footer">
-					<button type="button" onclick="insertTag('<%=itemID%>', '')" class="btn btn-success" data-dismiss="modal">Thêm</button>
+					<button type="button" onclick="insertTag('<%=itemID%>', '')"
+						class="btn btn-success" data-dismiss="modal">Thêm</button>
 				</div>
 
 			</div>
 		</div>
 	</div>
 	<script>
-		
-	<%-- <%out.write("checkStocking(" + stocking + ");");
-			for (String s : size) {
-				out.write("checkSize('" + s + "');");
-			}%> --%>
+		document.getElementById("dateOfMade").max = new Date().toISOString()
+				.split("T")[0];
+
 		priceHistory();
-		showPrice();
+		formatSalePrice();
 		showStock();
-		<%out.write("showTags('" + itemID + "');");%>
-		
+	<%out.write("showTags('" + itemID + "');");%>
 		function editSalePrice() {
 			document.getElementById("currSalePrice").readOnly = false;
 		}
-		
-		function showPrice() {
-			document.getElementById("showPrice").innerText = formatNumber(document.getElementById("currSalePrice").value);
+
+		function formatSalePrice() {
+			document.getElementById("formatSalePrice").innerText = formatNumber(document
+					.getElementById("currSalePrice").value);
 		}
-		
+
+		function saveSalePrice(itemID, purchase_price) {
+			var salePriceUpdate = document.getElementById("currSalePrice").value;
+			$.ajax({
+				type : 'POST',
+				url : '/com.spring-mvc-demo/Admin/Items/EditActions',
+				dataType : 'JSON',
+				data : {
+					"salePriceUpdate" : salePriceUpdate,
+					"purchase_price" : purchase_price,
+					"itemID" : itemID,
+					"action" : "updateSalePrice"
+				},
+				success : function(data) {
+					alert('update successfully');
+					location.reload();
+				},
+				error : function(data) {
+					alert('failed');
+				}
+			});
+		}
+
 		function deleteTag(itemID, tag) {
 			$.ajax({
 				type : 'POST',
-				url : '/com.spring-mvc-demo/Admin/Items/DeleteTag',
+				url : '/com.spring-mvc-demo/Admin/Items/EditActions',
 				dataType : 'JSON',
 				data : {
 					"tag" : tag,
-					"itemID" : itemID
+					"itemID" : itemID,
+					"action" : "deleteTag"
 				},
 				success : function(data) {
 					alert('delete successfully');
 					showTags(itemID);
 				},
 				error : function(data) {
-					alert('update failed');
+					alert(data);
 				}
 			});
 		}
-		
+
 		function insertTag(itemID) {
-			var tag= document.getElementById("insertTag").value;
+			var tag = document.getElementById("insertTag").value;
 			$.ajax({
 				type : 'POST',
-				url : '/com.spring-mvc-demo/Admin/Items/InsertTag',
+				url : '/com.spring-mvc-demo/Admin/Items/EditActions',
 				dataType : 'JSON',
 				data : {
 					"tag" : tag,
-					"itemID" : itemID
+					"itemID" : itemID,
+					"action" : "insertTag"
 				},
 				success : function(data) {
 					alert('insert successfully');
@@ -433,23 +406,31 @@
 				}
 			});
 		}
-		
+
 		function showTags(itemID) {
 			var html_code = '';
 			$
 					.ajax({
 						type : 'POST',
-						url : '/com.spring-mvc-demo/Admin/Items/GetTags',
+						url : '/com.spring-mvc-demo/Admin/Items/EditActions',
 						dataType : 'JSON',
-						data : {"itemID" : itemID },
+						data : {
+							"itemID" : itemID,
+							"action" : "getTag"
+						},
 						success : function(data) {
 							/* alert('in success'); */
 							$(data)
 									.each(
 											function() {
 												/* alert('4'); */
-												html_code += '<div class="alert"><button onclick="deleteTag('+this.itemID+', '+this.tagFunc+')" type="button" class="close" data-dismiss="alert">&times;</button><strong>'
-												+this.tag+'</strong></div>';
+												html_code += '<div class="alert"><button onclick="deleteTag('
+														+ this.itemID
+														+ ', '
+														+ this.tagFunc
+														+ ')" type="button" class="close" data-dismiss="alert">&times;</button><strong>'
+														+ this.tag
+														+ '</strong></div>';
 											});
 							/* alert(html_code); */
 							$('#tags').html(html_code);
@@ -459,37 +440,37 @@
 						}
 					});
 		}
-		
+
 		function showStock() {
-			html_code= '';
-			<%ArrayList<HashMap<String, Object>> stock = connection.getStock(itemID);
+			html_code = '';
+	<%ArrayList<HashMap<String, Object>> stock = itemInforModel.getStock(itemID);
 
 			for (HashMap<String, Object> obj : stock) {
-				out.print("html_code+= '<tr><td>" + (String)obj.get("size")
-						+ "</td><td>"+String.valueOf((int)obj.get("inventory")-(int)obj.get("available"))+"</td><td>" + String.valueOf(obj.get("available")) + "</td><td>"
-						+ String.valueOf(obj.get("inventory")) + "</td></tr>';");
+				out.print("html_code+= '<tr><td>" + (String) obj.get("size") + "</td><td>"
+						+ String.valueOf((int) obj.get("inventory") - (int) obj.get("available")) + "</td><td>"
+						+ String.valueOf(obj.get("available")) + "</td><td>" + String.valueOf(obj.get("inventory"))
+						+ "</td></tr>';");
 			}%>
-			document.getElementById("stockTableBody").innerHTML = html_code;
+		document.getElementById("stockTableBody").innerHTML = html_code;
 		}
-		
+
 		function priceHistory() {
-			html_code= '';
-			<%ArrayList<HashMap<String, Object>> priceHistory = connection.getHistoryPrice(itemID);
+			html_code = '';
+	<%ArrayList<HashMap<String, Object>> priceHistory = itemInforModel.getHistoryPrice(itemID);
 
 			for (HashMap<String, Object> obj : priceHistory) {
 				out.print("html_code+= '<tr><td>'+formatNumber(" + String.valueOf(obj.get("purchase_price"))
 						+ ")+'</td><td>'+formatNumber(" + String.valueOf(obj.get("sale_price")) + ")+'</td><td>"
 						+ (String) obj.get("effect_time") + "</td></tr>';");
 			}%>
-			document.getElementById("priceTableBody").innerHTML = html_code;
+		document.getElementById("priceTableBody").innerHTML = html_code;
 		}
-		
-			
+
 		function formatNumber(num) {
 			return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
 					+ 'đ';
 		}
-		
+
 		function readURL(input) {
 			if (input.files && input.files[0]) {
 				var reader = new FileReader();
@@ -505,7 +486,7 @@
 		$("#file").change(function() {
 			readURL(this);
 		});
-		
+
 		function autocomplete(inp, arr) {
 			/*the autocomplete function takes two arguments,
 			the text field element and an array of possible autocompleted values:*/
@@ -626,14 +607,12 @@
 				"Balenciaga", "Gucci", "Anta", "Dolce & Gabbana", "MLB",
 				"Domba", "Lacoste", "Burberry", "Vans", "New Balance", "Y-3",
 				"Fendi", "Prada", "Reebok", "Filling Pieces", ];
-		
-		var itemTags= [
-			<%
-				ArrayList<String> itemTags= connection.getTags();
-				for (String tag: itemTags) {
-					out.print("'"+ tag+"', ");
-				}
-			%>
+
+		var itemTags = [
+	<%ArrayList<String> itemTags = itemInforModel.getTags();
+			for (String tag : itemTags) {
+				out.print("'" + tag + "', ");
+			}%>
 		];
 
 		autocomplete(document.getElementById("itemType"), itemType);

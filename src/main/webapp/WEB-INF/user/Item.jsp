@@ -1,10 +1,12 @@
-<%@page import="com.hoan.Objects.CartItem"%>
-<%@page import="com.hoan.Objects.Cart"%>
+<%@page import="com.hoan.Entity.CartItem"%>
+<%@page import="com.hoan.Entity.Cart"%>
 <%@page import="java.util.Set"%>
-<%@page import="com.hoan.Objects.SizeOfColor"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.HashMap"%>
-<%@page import="com.hoan.Connection.ConnectSQLServer"%>
+<%@page import="com.hoan.Model.Item"%>
+<%@page import="com.hoan.Model.Order"%>
+<%@page import="com.hoan.Model.ItemsInfor"%>
+<%@page import="com.hoan.Model.OrdersInfor"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -29,51 +31,38 @@
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-<style type="text/css">
-body {
-	padding-top: 56px;
-}
-
-.btn btn-secondary {
-	background: white;
-}
-
-.quantityCart {
-	height: 25px;
-	width: 25px;
-	background-color: red;
-	border-radius: 50%;
-	display: inline-block;
-	color: white;
-}
-</style>
+<link href="<c:url value="/resources/admintemplate/css/User_Item.css"/>"
+	rel="stylesheet" />
 
 </head>
 
-<body style="background:;">
+<body>
 	<%
+		Item itemModel = new Item();
+		ItemsInfor itemInforModel = new ItemsInfor();
+		Order orderModel = new Order();
+		OrdersInfor ordersInforModel = new OrdersInfor();
+
 		String itemDetail, itemImg, itemName, itemType, dateOfMade, productionCompany, madeIn, itemColor;
 		int itemPrice, stocking;
 
 		String itemID = request.getParameter("itemID");
-		ConnectSQLServer connection = new ConnectSQLServer();
 		String username = (String) session.getAttribute("user");
 
-		HashMap<String, Object> item = connection.getItem(itemID);
+		HashMap<String, Object> item = itemModel.getItem(itemID);
 		itemDetail = (String) item.get("itemDetail");
 		itemImg = ((String) item.get("itemImg")).substring(20);
 		itemName = (String) item.get("itemName");
-		itemPrice = connection.getItemPrice(itemID).get(1);
-		stocking = connection.getStockingItem(itemID).get(0);
+		itemPrice = itemInforModel.getItemPrice(itemID).get(1);
+		stocking = itemInforModel.getSumStockItem(itemID).get(0);
 		itemType = (String) item.get("itemType");
 		dateOfMade = (String) item.get("dateOfMade");
 		productionCompany = (String) item.get("productionCompany");
 		madeIn = (String) item.get("madeIn");
 		itemColor = (String) item.get("itemColor");
 
-		HashMap<String, Integer> sizeItem = connection.getSize(itemID);
-		HashMap<String, String> sameItemColor = connection.getSameItemColor(itemName, itemColor);
+		HashMap<String, Integer> sizeItem = itemInforModel.getSize(itemID);
+		HashMap<String, String> sameItemColor = itemInforModel.getSameItemColor(itemName, itemColor);
 	%>
 	<script>
 		function loggedIn() {
@@ -109,11 +98,11 @@ body {
 		}
 
 		function addCartItem(itemID) {
-			<%
-				if(username == null) out.print("var username= null;") ;
-				else out.print("var username= '"+username+"';");
-			%>
-			if (username != null) {
+	<%if (username == null)
+				out.print("var username= null;");
+			else
+				out.print("var username= '" + username + "';");%>
+		if (username != null) {
 				var size = document.getElementById("getSize").textContent;
 				var quantity = document.getElementById("quantity").value;
 				if (size == '') {
@@ -121,17 +110,17 @@ body {
 				} else if (quantity < 1) {
 					alert('chọn sai số lượng');
 				} else {
-					alert('1');
 					quantity = quantity.toString();
 					$
 							.ajax({
 								type : 'POST',
-								url : '/com.spring-mvc-demo/Home/Item/AddCartItem',
+								url : '/com.spring-mvc-demo/UserActions',
 								dataType : 'JSON',
 								data : {
 									'itemID' : itemID,
 									'size' : size,
-									'quantity' : quantity
+									'quantity' : quantity,
+									'action' : 'addCartItem'
 								},
 								success : function(data) {
 									alert('đã thêm sản phẩm vào giỏ hàng');
@@ -139,7 +128,7 @@ body {
 											.getElementById("quantityCart").innerText) + 1;
 									document.getElementById("quantityCart").innerHTML = quantityCart
 											.toString();
-									alert(quantityCart);
+									
 								},
 								error : function(data) {
 									alert('2')
@@ -152,29 +141,6 @@ body {
 		function getLinkLogin() {
 			var link = '<a href="http://localhost:8080/com.spring-mvc-demo/Login"><input type="button" class="btn btn-success" onclick="addItemCart()" value="Thêm vào giỏ hàng"></a>';
 			document.write(link);
-		}
-
-		function addItemTypeNotActive(itemType) {
-			document
-					.write('<a href="http://localhost:8080/com.spring-mvc-demo/Home?itemType='
-							+ itemType
-							+ '" class="list-group-item">'
-							+ itemType + '</a>');
-		}
-		function addItemTypeActive(itemType) {
-			document
-					.write('<a href="http://localhost:8080/com.spring-mvc-demo/Home?itemType='
-							+ itemType
-							+ '" class="list-group-item active">'
-							+ itemType + '</a>');
-		}
-		function addHomePageActive() {
-			document
-					.write('<a href="http://localhost:8080/com.spring-mvc-demo/Home" class="list-group-item active">Toàn bộ sản phẩm</a>');
-		}
-		function addHomePageNotActive() {
-			document
-					.write('<a href="http://localhost:8080/com.spring-mvc-demo/Home" class="list-group-item">Toàn bộ sản phẩm</a>');
 		}
 	</script>
 	<!-- Navigation -->
@@ -227,33 +193,6 @@ body {
 
 			<div class="col-lg-3">
 				<h2 class="my-4">SHOES MENU</h2>
-				<div class="list-group">
-					<%
-						if (itemType != null) {
-							out.write("<script>");
-							out.write("addHomePageNotActive()");
-							out.write("</script>");
-						} else {
-							out.write("<script>");
-							out.write("addHomePageActive()");
-							out.write("</script>");
-						}
-					%>
-					<%
-						ArrayList<String> allItemType = connection.getItemType();
-						for (String s : allItemType) {
-							if (s.equals(itemType)) {
-								out.write("<script>");
-								out.write("addItemTypeActive('" + s + "')");
-								out.write("</script>");
-							} else {
-								out.write("<script>");
-								out.write("addItemTypeNotActive('" + s + "')");
-								out.write("</script>");
-							}
-						}
-					%>
-				</div>
 			</div>
 			<!-- /.col-lg-3 -->
 
@@ -337,22 +276,133 @@ body {
 				</div>
 				<!-- /.card -->
 
+				<div class="card card-outline-secondary my-4">
+					<div class="card-header">
+						<h3 style="font-weight: lighter;">Bình luận</h3>
+					</div>
+					<div class="card-body">
+						<div class="bootstrap snippets">
+							<div class="panel">
+								<div class="panel-body">
+									<textarea class="form-control" rows="2"
+										placeholder="What are you thinking?"></textarea>
+									<div class="mar-top clearfix">
+										<button class="btn btn-sm btn-primary pull-right"
+											type="submit">
+											<i class="fa fa-pencil fa-fw"></i> Send
+										</button>
+										<a class="btn btn-trans btn-icon fa fa-camera add-tooltip"
+											href="#"></a>
+									</div>
+									<img alt="" src="<c:url value="/resources/images/avatar_login.png"/>"> 
+								</div>
+							</div>
+
+						</div>
+
+						<div class="media-block">
+							<a class="media-left" href="#"><img class="img-circle img-sm"
+								alt="Profile Picture"
+								src="https://bootdey.com/img/Content/avatar/avatar1.png"></a>
+							<div class="media-body">
+								<div class="mar-btm">
+									<a href="#"
+										class="btn-link text-semibold media-heading box-inline">Lisa
+										D.</a>
+									<p class="text-muted text-sm">
+										<i class="fa fa-mobile fa-lg"></i> - From Mobile - 11 min ago
+									</p>
+								</div>
+								<p>consectetuer adipiscing elit, sed diam nonummy nibh
+									euismod tincidunt ut laoreet dolore magna aliquam erat
+									volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci
+									tation ullamcorper suscipit lobortis nisl ut aliquip ex ea
+									commodo consequat.</p>
+								<div class="pad-ver">
+									<div class="btn-group">
+										<a class="btn btn-sm btn-default btn-hover-success" href="#"><i
+											class="fa fa-thumbs-up"></i></a> <a
+											class="btn btn-sm btn-default btn-hover-danger" href="#"><i
+											class="fa fa-thumbs-down"></i></a>
+									</div>
+									<a class="btn btn-sm btn-default btn-hover-primary" href="#">Comment</a>
+								</div>
+								<hr>
+
+								<!-- Comments -->
+								<div>
+									<div class="media-block">
+										<a class="media-left" href="#"><img
+											class="img-circle img-sm" alt="Profile Picture"
+											src="https://bootdey.com/img/Content/avatar/avatar2.png"></a>
+										<div class="media-body">
+											<div class="mar-btm">
+												<a href="#"
+													class="btn-link text-semibold media-heading box-inline">Bobby
+													Marz</a>
+												<p class="text-muted text-sm">
+													<i class="fa fa-mobile fa-lg"></i> - From Mobile - 7 min
+													ago
+												</p>
+											</div>
+											<p>Sed diam nonummy nibh euismod tincidunt ut laoreet
+												dolore magna aliquam erat volutpat. Ut wisi enim ad minim
+												veniam, quis nostrud exerci tation ullamcorper suscipit
+												lobortis nisl ut aliquip ex ea commodo consequat.</p>
+											<div class="pad-ver">
+												<div class="btn-group">
+													<a class="btn btn-sm btn-default btn-hover-success active"
+														href="#"><i class="fa fa-thumbs-up"></i> You Like it</a> <a
+														class="btn btn-sm btn-default btn-hover-danger" href="#"><i
+														class="fa fa-thumbs-down"></i></a>
+												</div>
+												<a class="btn btn-sm btn-default btn-hover-primary" href="#">Comment</a>
+											</div>
+											<hr>
+										</div>
+									</div>
+
+									<div class="media-block">
+										<a class="media-left" href="#"><img
+											class="img-circle img-sm" alt="Profile Picture"
+											src="https://bootdey.com/img/Content/avatar/avatar3.png">
+										</a>
+										<div class="media-body">
+											<div class="mar-btm">
+												<a href="#"
+													class="btn-link text-semibold media-heading box-inline">Lucy
+													Moon</a>
+												<p class="text-muted text-sm">
+													<i class="fa fa-globe fa-lg"></i> - From Web - 2 min ago
+												</p>
+											</div>
+											<p>Duis autem vel eum iriure dolor in hendrerit in
+												vulputate ?</p>
+											<div class="pad-ver">
+												<div class="btn-group">
+													<a class="btn btn-sm btn-default btn-hover-success"
+														href="#"><i class="fa fa-thumbs-up"></i></a> <a
+														class="btn btn-sm btn-default btn-hover-danger" href="#"><i
+														class="fa fa-thumbs-down"></i></a>
+												</div>
+												<a class="btn btn-sm btn-default btn-hover-primary" href="#">Comment</a>
+											</div>
+											<hr>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+
 			</div>
 			<!-- /.col-lg-9 -->
 
 		</div>
-
 	</div>
-	<!-- /.container -->
-
-	<!-- Footer -->
-	<footer class="py-5 bg-dark">
-		<div class="container">
-			<p class="m-0 text-center text-white">Copyright &copy; Your
-				Website 2020</p>
-		</div>
-		<!-- /.container -->
-	</footer>
 
 	<!-- Bootstrap core JavaScript -->
 	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>

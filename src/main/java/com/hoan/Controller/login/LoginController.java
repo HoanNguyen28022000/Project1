@@ -14,54 +14,41 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.hoan.Connection.ConnectSQLServer;
+import com.hoan.Model.AccountsInfor;
+import com.hoan.Model.ConnectSQLServer;
 
 @Controller
 @Scope("session")
 public class LoginController {
 
-	ConnectSQLServer connectSQLServer;
+	private AccountsInfor accountsInfor= new AccountsInfor();
 
 	@SuppressWarnings("deprecation")
 	@RequestMapping(value= {"/LoginController"})
 	public String login(HttpServletRequest request,HttpServletResponse response, Model model) throws IOException {
 		HttpSession session=request.getSession();
-		String usename = request.getParameter("name");
+		String username = request.getParameter("name");
 		String pass = request.getParameter("pass");
 
-		connectSQLServer = new ConnectSQLServer();
-		HashMap<String, String> accounts = connectSQLServer.getAccount();
+		HashMap<String, String> accs = accountsInfor.getAccounts();
 
-		model.addAttribute("name", usename);
-		System.out.println(usename + " " + pass);
+		model.addAttribute("name", username);
 
-		Set<String> usenames = accounts.keySet();
-		for (String s : usenames) {
-			if (usename.equals("admin") && pass.equals("123456789")) {
-				System.out.println("user : "+usename);
-				session.putValue("user", usename);
-				String[] arr=session.getValueNames();
-				for(String atrribute:arr) {
-					System.out.println(atrribute);
-				}
-				System.out.println(session.getId()+" "+session.getValue("loginController"));
-				System.out.println();
+		Set<String> usernames = accs.keySet();
+		for (String s : usernames) {
+			if (username.equals("admin") && pass.equals("123456789")) {
+				System.out.println("admin : "+username);
+				session.putValue("admin", username);
 				response.sendRedirect(request.getContextPath()+"/Admin");
 				return "admin/Admin";
 			}
-			else if (usename.equals(s) && pass.equals(accounts.get(s))) {
-				System.out.println("user : "+usename);
-				session.putValue("user", usename);
-				String[] arr=session.getValueNames();
-				for(String atrribute:arr) {
-					System.out.println(atrribute);
-				}
-				System.out.println(session.getId()+" "+session.getValue("loginController"));
-				System.out.println();
+			else if (username.equals(s) && pass.equals(accs.get(s))) {
+				System.out.println("user : "+username);
+				session.putValue("user", username);
 				response.sendRedirect(request.getContextPath()+"/Home");
 				return "user/Home";
 			}
 		}
-//		response.sendRedirect("views/error.jsp");
-	return"views/error";
+		response.sendRedirect("views/error.jsp");
+		return"views/error";
 }}
