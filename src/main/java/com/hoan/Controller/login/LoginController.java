@@ -14,8 +14,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.hoan.Model.AccountsInfor;
-import com.hoan.Model.ConnectSQLServer;
+import com.hoan.Model.DAO.AccountsInfor;
+import com.hoan.Model.DAO.ConnectSQLServer;
 
 @Controller
 @Scope("session")

@@ -16,9 +16,9 @@ import javax.servlet.http.HttpSession;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import com.hoan.Entity.PurchaseItem;
-import com.hoan.Entity.PurchaseOrder;
-import com.hoan.Model.PurchaseOrderInfor;
+import com.hoan.Model.DAO.PurchaseOrderInfor;
+import com.hoan.Model.Entity.PurchaseItem;
+import com.hoan.Model.Entity.PurchaseOrder;
 
 @MultipartConfig
 public class PurchaseItemsActions extends HttpServlet {

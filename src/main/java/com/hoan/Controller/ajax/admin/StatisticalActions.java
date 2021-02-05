@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import com.hoan.Model.Statistical;
+import com.hoan.Model.DAO.Statistical;
 import com.sun.org.glassfish.external.statistics.Statistic;
 
 /**

@@ -5,8 +5,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.hoan.Model.AccountsInfor;
-import com.hoan.Model.ConnectSQLServer;
+import com.hoan.Model.DAO.AccountsInfor;
+import com.hoan.Model.DAO.ConnectSQLServer;
 
 @Controller
 public class CreateAccountController {

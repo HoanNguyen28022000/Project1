@@ -17,9 +17,9 @@ import javax.servlet.http.Part;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import com.hoan.Model.ConnectSQLServer;
-import com.hoan.Model.Item;
-import com.hoan.Model.ItemsInfor;
+import com.hoan.Model.DAO.ConnectSQLServer;
+import com.hoan.Model.DAO.Item;
+import com.hoan.Model.DAO.ItemsInfor;
 
 @MultipartConfig(fileSizeThreshold=1024*1024*1,
 maxFileSize=1024*1024*10, maxRequestSize=1024*1024*100)

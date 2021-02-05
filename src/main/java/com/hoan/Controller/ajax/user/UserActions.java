@@ -16,12 +16,12 @@ import javax.servlet.http.HttpSession;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import com.hoan.Entity.Cart;
-import com.hoan.Entity.CartItem;
-import com.hoan.Model.Item;
-import com.hoan.Model.ItemsInfor;
-import com.hoan.Model.Order;
-import com.hoan.Model.OrdersInfor;
+import com.hoan.Model.DAO.Item;
+import com.hoan.Model.DAO.ItemsInfor;
+import com.hoan.Model.DAO.Order;
+import com.hoan.Model.DAO.OrdersInfor;
+import com.hoan.Model.Entity.Cart;
+import com.hoan.Model.Entity.CartItem;
 
 public class UserActions extends HttpServlet {
 	private static final long serialVersionUID = 1L;

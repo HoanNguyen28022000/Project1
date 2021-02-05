@@ -1,10 +1,10 @@
-<%@page import="com.hoan.Model.Statistical"%>
+<%@page import="com.hoan.Model.DAO.Statistical"%>
 <%@page import="java.util.Set"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="com.hoan.Model.Item"%>
-<%@page import="com.hoan.Model.ItemsInfor"%>
-<%@page import="com.hoan.Model.ConnectSQLServer"%>
+<%@page import="com.hoan.Model.DAO.Item"%>
+<%@page import="com.hoan.Model.DAO.ItemsInfor"%>
+<%@page import="com.hoan.Model.DAO.ConnectSQLServer"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>

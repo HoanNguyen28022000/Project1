@@ -14,10 +14,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import com.hoan.Entity.CartItem;
-import com.hoan.Model.Customers;
-import com.hoan.Model.Order;
-import com.hoan.Model.OrdersInfor;
+import com.hoan.Model.DAO.Customers;
+import com.hoan.Model.DAO.Order;
+import com.hoan.Model.DAO.OrdersInfor;
+import com.hoan.Model.Entity.CartItem;
 
 public class OrderActions extends HttpServlet {
 	private static final long serialVersionUID = 1L;

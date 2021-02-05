@@ -14,9 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import com.hoan.Model.ConnectSQLServer;
-import com.hoan.Model.Item;
-import com.hoan.Model.ItemsInfor;
+import com.hoan.Model.DAO.ConnectSQLServer;
+import com.hoan.Model.DAO.Item;
+import com.hoan.Model.DAO.ItemsInfor;
 
 @MultipartConfig
 public class ItemActions extends HttpServlet {

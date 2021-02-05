@@ -1,12 +1,12 @@
 <%@page import="java.sql.ResultSet"%>
 <%@page import="java.util.HashMap"%>
-<%@page import="com.hoan.Model.Item"%>
-<%@page import="com.hoan.Model.Order"%>
-<%@page import="com.hoan.Model.ItemsInfor"%>
-<%@page import="com.hoan.Model.OrdersInfor"%>
-<%@page import="com.hoan.Model.Customers"%>
-<%@page import="com.hoan.Entity.Cart"%>
-<%@page import="com.hoan.Entity.CartItem"%>
+<%@page import="com.hoan.Model.DAO.Item"%>
+<%@page import="com.hoan.Model.DAO.Order"%>
+<%@page import="com.hoan.Model.DAO.ItemsInfor"%>
+<%@page import="com.hoan.Model.DAO.OrdersInfor"%>
+<%@page import="com.hoan.Model.DAO.Customers"%>
+<%@page import="com.hoan.Model.Entity.Cart"%>
+<%@page import="com.hoan.Model.Entity.CartItem"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
